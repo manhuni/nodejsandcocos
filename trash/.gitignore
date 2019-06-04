@@ -1,7 +1,0 @@
-# Ignore default 
-
-#nmp install
-game-sever/node_modules 
-
-#cocos2d-html5: git clone git@github.com:cocos2d/cocos2d-html5.git
-cocos2d
