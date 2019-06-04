@@ -7,9 +7,10 @@ var express = require('express');
 var http = require('http');
 var path = require('path');
 var ejs = require('ejs');
-
 var app = express();
-
+var socket = require('socket.io');
+var config = require('./config');
+var GCTRL = require('./gamecontroller/gamecontroller');
 // all environments
 app.set('port', process.env.PORT || 8088);
 var rootPath = path.join(__dirname, '../');
@@ -29,6 +30,23 @@ app.get('/index', function (req, res) {
 });
 
 var myIP = '192.168.15.144';
-http.createServer(app).listen(app.get('port'),myIP, function(){
-  console.log('Express server listening on port: ' + myIP+':'+ app.get('port'));
+
+var server = http.createServer(app).listen(app.get('port'), myIP, function(){
+  console.log("Express server listening on port " + app.get('port'));
+});
+
+var io = socket.listen(server);
+//When a client connect or connection server will handle as connection event and auto into connection
+io.sockets.on('connection', function (socket) {
+  console.log('a user connected');
+  //an event happended
+  socket.on(config.GAME_SETTING.SOCKETIO.EVENT.SAYHELLO, function(data){
+  	var eventResponse = config.GAME_SETTING.SOCKETIO.EVENT.GETSOMEDATAFROMSERVER;
+  	GCTRL.processTalking(socket, eventResponse, data);
+  })
+  //disconnect event
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+
 });

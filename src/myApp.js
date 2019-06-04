@@ -19,7 +19,10 @@ var MyLayer = cc.Layer.extend({
             res.s_CloseNormal,
             res.s_CloseSelected,
             function () {
-                cc.log("close");
+                clientHandler.contactToServer(GAME_CONFIG.SOCKETIO.EVENT.SAYHELLO, {
+                    user: "NVM",
+                    text: "Hello, world!"
+                })
             },this);
         closeItem.setAnchorPoint(0.5, 0.5);
 
@@ -44,14 +47,18 @@ var MyLayer = cc.Layer.extend({
         this.sprite.setPosition(size.width / 2, size.height / 2);
         this.sprite.setScale(size.height/this.sprite.getContentSize().height);
         this.addChild(this.sprite, 0);
+    },
+    resData: function(data){
+        //
+        alert(data);
     }
 });
 
 var MyScene = cc.Scene.extend({
     onEnter:function () {
         this._super();
-        var layer = new MyLayer();
-        this.addChild(layer);
-        layer.init();
+        sceneGamePlay = new MyLayer();
+        this.addChild(sceneGamePlay);
+        sceneGamePlay.init();
     }
 });
