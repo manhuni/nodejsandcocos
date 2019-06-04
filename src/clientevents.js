@@ -5,7 +5,12 @@ var clientHandler = {
         socket.emit(event, data);
     }
 };
-socket.on(GAME_CONFIG.SOCKETIO.EVENT.GETSOMEDATAFROMSERVER, function(data){
-    console.log("I got some message here: ");
-    sceneGamePlay.resData(data);
+
+socket.on(GAME_CONFIG.SOCKETIO.EVENT.server_send_begin_info, function(data){
+    sceneGamePlay.resData(data.data);
 });
+
+socket.on(GAME_CONFIG.SOCKETIO.EVENT.server_send_end_of_game, function(data){
+    sceneGamePlay.resData(data.data);
+});
+

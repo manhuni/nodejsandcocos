@@ -40,10 +40,13 @@ var io = socket.listen(server);
 io.sockets.on('connection', function (socket) {
   console.log('a user connected');
   //an event happended
-  socket.on(config.GAME_SETTING.SOCKETIO.EVENT.SAYHELLO, function(data){
-  	var eventResponse = config.GAME_SETTING.SOCKETIO.EVENT.GETSOMEDATAFROMSERVER;
-  	GCTRL.processTalking(socket, eventResponse, data);
-  })
+  socket.on(config.GAME_SETTING.SOCKETIO.EVENT.client_request_begin_info, function(data){
+  	GCTRL.processTalking(socket, config.GAME_SETTING.SOCKETIO.EVENT.server_send_begin_info, data);
+  });
+  //another event
+  socket.on(config.GAME_SETTING.SOCKETIO.EVENT.client_request_end_of_game, function(data){
+  	GCTRL.processTalking(socket, config.GAME_SETTING.SOCKETIO.EVENT.server_send_end_of_game, data);
+  });
   //disconnect event
   socket.on('disconnect', function(){
     console.log('user disconnected');

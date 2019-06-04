@@ -1,8 +1,8 @@
 var MyLayer = cc.Layer.extend({
-    helloLabel:null,
-    sprite:null,
+    helloLabel: null,
+    sprite: null,
 
-    init:function () {
+    init: function() {
 
         //////////////////////////////
         // 1. super init first
@@ -15,21 +15,31 @@ var MyLayer = cc.Layer.extend({
         var size = cc.director.getWinSize();
 
         // add a "close" icon to exit the progress. it's an autorelease object
-        var closeItem = new cc.MenuItemImage(
+        var closeItem1 = new cc.MenuItemImage(
             res.s_CloseNormal,
             res.s_CloseSelected,
-            function () {
-                clientHandler.contactToServer(GAME_CONFIG.SOCKETIO.EVENT.SAYHELLO, {
+            function() {
+                clientHandler.contactToServer(GAME_CONFIG.SOCKETIO.EVENT.client_request_begin_info, {
                     user: "NVM",
-                    text: "Hello, world!"
+                    text: "Hello, i need to get infor to begin!"
                 })
-            },this);
-        closeItem.setAnchorPoint(0.5, 0.5);
+            }, this);
+        var closeItem2 = new cc.MenuItemImage(
+            res.s_CloseNormal,
+            res.s_CloseSelected,
+            function() {
+                clientHandler.contactToServer(GAME_CONFIG.SOCKETIO.EVENT.client_request_end_of_game, {
+                    user: "NVM",
+                    text: "Hello, i need to end game now!"
+                })
+            }, this);
 
-        var menu = new cc.Menu(closeItem);
-        menu.setPosition(0, 0);
+
+        var menu = new cc.Menu(closeItem1, closeItem2);
+        menu.setPosition(cc.p(size.width / 2, size.height / 2));
+        menu.alignItemsVertically();
+
         this.addChild(menu, 1);
-        closeItem.setPosition(size.width - 20, 20);
 
         /////////////////////////////
         // 3. add your codes below...
@@ -45,17 +55,17 @@ var MyLayer = cc.Layer.extend({
         this.sprite = new cc.Sprite(res.s_HelloWorld);
         this.sprite.setAnchorPoint(0.5, 0.5);
         this.sprite.setPosition(size.width / 2, size.height / 2);
-        this.sprite.setScale(size.height/this.sprite.getContentSize().height);
+        this.sprite.setScale(size.height / this.sprite.getContentSize().height);
         this.addChild(this.sprite, 0);
     },
-    resData: function(data){
-        //
+    resData: function(data) {
+        console.log(data);
         alert(data);
     }
 });
 
 var MyScene = cc.Scene.extend({
-    onEnter:function () {
+    onEnter: function() {
         this._super();
         sceneGamePlay = new MyLayer();
         this.addChild(sceneGamePlay);
